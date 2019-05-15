@@ -1,0 +1,63 @@
+﻿@model IList<SchoolStudentsApi.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    @foreach (var item in @Model)
+    {
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(m=>m[0].Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model[0].Surname)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Surname)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model[0].Age)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Age)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model[0].IDNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.IDNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model[0].Grade)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => item.Grade)
+            </dd>
+
+        </dl>
+    }
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.id }) |*@
+    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink("Create", "Create")
+</p>
+</p>
