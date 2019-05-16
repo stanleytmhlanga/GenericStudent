@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 namespace SchoolStudentsApi.Interfaces
 {
     public interface IStudentRepository 
@@ -12,5 +11,6 @@ namespace SchoolStudentsApi.Interfaces
         void Insert(Student student);
         void Delete(int studentId);
         Student GetById(int studentId);
+        void Save();
     }
 }

@@ -7,25 +7,8 @@ namespace SchoolStudentsApi.Models
 {
     public class Student
     {
-        //public Student(List<SchoolStudents.Domain.Models.Student> domains)
-        //{
-        //    foreach (var domain in domains)
-        //    {
-        //        this.id = domain.id;
-        //        this.Name = domain.Name;
-        //        this.Surname = domain.Surname;
-        //        this.Age = domain.Age;
-        //        this.Grade = domain.Grade;
-        //        this.IDNumber = domain.IDNumber;
-        //    }
-          
-           
-        //}
-
         public Student()
-        {
-
-        }
+        { }
         [Key]
         public int id { get; set; }
         public string Name { get; set; }

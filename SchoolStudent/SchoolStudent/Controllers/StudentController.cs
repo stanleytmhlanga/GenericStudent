@@ -5,58 +5,35 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SchoolStudents.Domain;
+using SchoolStudentsApi.Mappers;
 using SchoolStudentsApi.Models;
 using SchoolStudentsApi.Repositories;
+using SchoolStudentsApi.UnitOfWork;
 
 namespace SchoolStudent.Controllers
 {
     public class StudentController : Controller
     {
         private  IStudentRepository studentRepository;
-        private Student studentApi;
-        public StudentController(IStudentRepository studentRepository,Student student)
+        private UnitOfWork unitOfWork;
+        public StudentController(IStudentRepository studentRepository,UnitOfWork unitOfWork)
         {
+            this.unitOfWork = unitOfWork;
             this.studentRepository = studentRepository;
-            this.studentApi = student;
         }
-
-        //public StudentController()
-        //{
-        //    this.studentRepository = new StudentRepository(new SchoolContext());
-        //}
         // GET: Student
         public ActionResult Index()
         {
             List<Student> list = new List<Student>();
+            var courses = unitOfWork.CourseRepository.Get(includeProperties: "id");
+            //var departments = unitOfWork.DepartmentRepository.GetAll();
             var student = studentRepository.GetStudent();
-            //= new List<Student>(student.ToList());
             foreach (var item in student)
             {
-                
-               list = new List<Student>() { new Student()
-               {
-                   id = item.id,
-                   Name = item.Name,
-                   Surname = item.Surname,
-                   Grade = item.Grade,
-                   IDNumber =  item.IDNumber,
-                   Age = item.Age
-               } };
+                list.Add(item.MapToApi());
             }
-          
-            //list.Add(student);
             return View(list);
         }
-
-        //internal List<Student> MapToApi(List<SchoolStudents.Domain.Models.Student> domain)
-        //{
-        //    List<Student> api = new List<Student>(){new Student()};
-        //    foreach (var item in domain)
-        //    {
-        //        api.Add(item);
-        //    }
-
-        //}
         // GET: Student/Details/5
         public ActionResult Details(int id)
         {
@@ -79,21 +56,9 @@ namespace SchoolStudent.Controllers
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
                 {
-                    SchoolStudents.Domain.Models.Student domain =
-                        new SchoolStudents.Domain.Models.Student()
-                        {
-                           // id = studentApi.id != 0 ? studentApi.id : 1,
-                            Name = studentApi.Name,
-                            Surname = studentApi.Surname,
-                            Age = studentApi.Age,
-                            Grade = studentApi.Grade,
-                            IDNumber = studentApi.IDNumber,
-                        };
-
-
+                    var domain = studentApi.MapToDomain();
                     studentRepository.Insert(domain);
                 }
-                
                 return RedirectToAction("Index");
             }
             catch(Exception ex)
@@ -105,20 +70,26 @@ namespace SchoolStudent.Controllers
         // GET: Student/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var api = studentRepository.GetById(id).MapToApi();
+
+            return View(api);
         }
 
         // POST: Student/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Student studentApi)
         {
             try
             {
                 // TODO: Add update logic here
-
+                if (ModelState.IsValid)
+                {
+                    var domain = studentApi.MapToDomain();
+                    studentRepository.Update(domain);
+                }
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
@@ -127,20 +98,25 @@ namespace SchoolStudent.Controllers
         // GET: Student/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var api = studentRepository.GetById(id).MapToApi();
+            return View(api);
         }
 
         // POST: Student/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Student studentApi)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                if (ModelState.IsValid)
+                {
+                    var domain = studentApi.MapToDomain();
+                    studentRepository.Delete(domain.id);
+                }
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }

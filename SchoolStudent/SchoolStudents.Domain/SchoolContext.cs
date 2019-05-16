@@ -7,17 +7,11 @@ namespace SchoolStudents.Domain
 {
     public class SchoolContext : DbContext
     {
-        //public SchoolContext(string ConnectionString) : base(ConnectionString)
-        //{
-
-        //}
-
         public SchoolContext() : base("StudentDB")
-        {
-
-        }
+        {}
         public DbSet<Student> Student { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Department> Department { get; set; }
 
-    //    public System.Data.Entity.DbSet<SchoolStudents.Domain.Models.Student> Students { get; set; }
     }
 }

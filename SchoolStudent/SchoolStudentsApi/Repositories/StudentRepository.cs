@@ -20,6 +20,7 @@ namespace SchoolStudentsApi.Repositories{
         {
             Student student = context.Student.Find(studentId);
             context.Student.Remove(student);
+            Save();
         }
         public Student GetById(int studentId)
         {
@@ -39,7 +40,16 @@ namespace SchoolStudentsApi.Repositories{
 
         public void Update(Student student)
         {
-            context.Entry(student).State = EntityState.Modified;
+            var RecordExist = context.Student.Find(student.id);
+            if (RecordExist == null)
+            {
+                context.Student.Add(student);
+            }
+            else
+            {
+                context.Entry(RecordExist).State = EntityState.Detached;
+                context.Entry(student).State = EntityState.Modified;
+            }
         }
 
         public void Save()

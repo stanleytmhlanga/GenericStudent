@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using SchoolStudents.Domain;
 using SchoolStudentsApi.Models;
+using SchoolStudentsApi.UnitOfWork;
 
 [assembly: WebActivator.PostApplicationStartMethod(typeof(SchoolStudent.App_Start.SimpleInjectorInitializer), "Initialize")]
 
@@ -36,30 +37,14 @@ namespace SchoolStudent.App_Start
      
         private static void InitializeContainer(Container container)
         {
-            //var ConnectionString = ConfigurationManager.ConnectionStrings["StudentDb"];
-
-            //container.Register<DbContext>(() =>
-            //{
-
-            //    //var conString = Configuration.GetConnectionString("DefaultConnection");
-            //    //var options = "DefaultConnection";
-            //    return new SchoolContext(ConnectionString.ConnectionString);
-
-            //});
-
-
             container.Register<SchoolContext>(Lifestyle.Singleton);
             container.Register<DbContext,SchoolContext>(Lifestyle.Singleton);
             container.Register<IStudentRepository, StudentRepository>(Lifestyle.Singleton);
-           
             container.Register<Student>(Lifestyle.Singleton);
-            //container.Register<IStudentRepository>();
-            //container.Register<StudentRepository>(Lifestyle.Scoped);
-
-            // Register your services here (remove this line).
-
-            // For instance:
-            // container.Register<IUserRepository, SqlUserRepository>(Lifestyle.Scoped);
+            container.Register<Course>(Lifestyle.Singleton);
+            container.Register<Department>(Lifestyle.Singleton);
+            container.Register(typeof(GenericRepository<>));
+            container.Register<UnitOfWork>(Lifestyle.Singleton);
         }
     }
 }
